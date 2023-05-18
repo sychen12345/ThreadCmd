@@ -1,9 +1,3 @@
-//
-// Created by chensiyuan on 2023/5/12.
-//
-
-#ifndef YXSOUTHMODULE_THREADPOOL_H
-#define YXSOUTHMODULE_THREADPOOL_H
 #include <iostream>
 #include <vector>
 #include <string>
@@ -14,29 +8,15 @@
 #include <mutex>
 #include <condition_variable>
 #include <map>
-
-// 定义命令结构体
 struct Command
 {
     int batch_id; // 批次 ID
     int seq;      // 序列号
     std::string name;
 };
+
+// 定义回调函数类型
 using Callback = std::function<void(const std::vector<Command> &, const std::string &)>;
-class UartCmd
-{
-};
-class UartDevice
-{
-    virtual void addRwCommand(const std::vector<std::shared_ptr<UartCmd>> &uartCmd)
-    {
-        for (const auto &command : uartCmd)
-        {
-            Command cmd{};
-            std::unique_lock<std::mutex> lock;
-        }
-    }
-};
 
 class ThreadPool
 {
@@ -48,6 +28,7 @@ public:
 
 private:
     void process_command(const Command &command);
+
     std::vector<std::thread> threads_;
     std::vector<std::thread> dispatch_threads_; // 用于分发任务的线程
 
@@ -70,7 +51,5 @@ private:
 
     std::mutex batch_id_mutex_; // batch_id_ 的互斥锁
 
-    std::map<int, int> done_counts_;
+    std::map<int, int> done_counts_; // 完成命令的 [批数] = 条数
 };
-
-#endif // YXSOUTHMODULE_THREADPOOL_H
