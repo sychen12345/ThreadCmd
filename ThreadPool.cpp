@@ -50,7 +50,7 @@ ThreadPool::ThreadPool(size_t numThreads)
                     dispatch_queue_.pop();
                     lock.unlock();
 
-                    // 执行任务
+                    // 执行任务 在多线程环境中
                     process_command(task);
                 }
             });
